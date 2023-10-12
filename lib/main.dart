@@ -1,4 +1,4 @@
-import 'package:challenge1/pages/home_page.dart';
+import 'package:challenge1/widgets/pages/groceries_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
       ),
-      home: HomePage(),
+      home: GroceriesPage(),
     );
   }
 }
