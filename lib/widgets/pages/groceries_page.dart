@@ -9,9 +9,6 @@ class GroceriesPage extends StatefulWidget {
   State<GroceriesPage> createState() => _GroceriesPageState();
 }
 
-// TODO: show "you have no items yet"
-// TODO: have swipe to delete in list
-
 class _GroceriesPageState extends State<GroceriesPage> {
   final List<GroceryItem> _groceryItems = [];
 
@@ -29,21 +26,38 @@ class _GroceriesPageState extends State<GroceriesPage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: _groceryItems.length,
-        itemBuilder: (BuildContext ctx, int index) {
-          return ListTile(
-            leading: Container(
-              color: _groceryItems[index].category.color,
-              width: screenSize.width * 0.06,
-              height: screenSize.width * 0.06,
+      body: _groceryItems.isEmpty
+          ? const Center(
+              child: Text("You haven't added any groceries yet."),
+            )
+          : ListView.builder(
+              itemCount: _groceryItems.length,
+              itemBuilder: (BuildContext ctx, int index) {
+                GroceryItem grocery = _groceryItems[index];
+                return Dismissible(
+                  key: Key(grocery.id),
+                  onDismissed: (direction) {
+                    _removeItem(index);
+                  },
+                  child: ListTile(
+                    leading: Container(
+                      color: grocery.category.color,
+                      width: screenSize.width * 0.06,
+                      height: screenSize.width * 0.06,
+                    ),
+                    title: Text(grocery.name),
+                    trailing: Text(grocery.quantity.toString()),
+                  ),
+                );
+              },
             ),
-            title: Text(_groceryItems[index].name),
-            trailing: Text(_groceryItems[index].quantity.toString()),
-          );
-        },
-      ),
     );
+  }
+
+  void _removeItem(index) {
+    setState(() {
+      _groceryItems.removeAt(index);
+    });
   }
 
   void _addItem() async {
